@@ -1,17 +1,30 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+
 import NavBar from './components/navbar/NavBar';
 import ItemListContainer from './components/itemListContainer/ItemListContainer';
+import ItemDetailContainer from './components/itemDetailContainer/ItemDetailContainer';
 import reportWebVitals from './reportWebVitals';
+import ItemCategoryContainer from './components/itemCategoryContainer/ItemCategoryContainer';
+
 import 'bootstrap/dist/css/bootstrap.min.css';
+import './index.css';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(
   <React.StrictMode>
-    <NavBar />
-    <ItemListContainer greeting="Hola!"/>
+    <BrowserRouter >
+      <NavBar />
+      
+      <Routes>
+        <Route exact path='/' element={<ItemListContainer />} />
+        <Route exact path='/item/:productoId' element={<ItemDetailContainer />} />
+        <Route exact path="/category/:categoryIdParam" element={<ItemCategoryContainer/>}/>
+      </Routes>
+
+    </BrowserRouter>
   </React.StrictMode>
 );
 
