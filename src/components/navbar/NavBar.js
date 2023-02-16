@@ -4,9 +4,18 @@ import Navbar from 'react-bootstrap/Navbar';
 import CartWidget from '../cartWidget/CartWidget';
 import { Link } from 'react-router-dom'
 
+import {CartProvider,useCartContext} from '../../context/CartContext'
+
+
 import './NavBar.css'
 
 function NavBar() {
+
+  const  {getCountItemsCart} = useCartContext()
+
+  const countItems = getCountItemsCart();
+
+
   return (
     <Navbar className="fixed-top " bg="light" expand="lg">
       <Container>
@@ -28,7 +37,8 @@ function NavBar() {
           </Nav>
         </Navbar.Collapse>
       </Container>
-      <CartWidget cantidad="10"/>
+      {/* si no hay elementos en el carrito, no mostramos el componente CartWidget */}
+      { (countItems > 0) ? <CartWidget cantidad={countItems}/> : <></>}
     </Navbar>
   );
 }

@@ -1,17 +1,41 @@
+import {CartProvider,useCartContext} from '../../context/CartContext'
 import Card from 'react-bootstrap/Card';
 
 import ItemCount from '../itemCount/ItemCount';
 
 import './ItemDetail.css';
+import react from 'react';
 
 const ItemDetail = (props) => {
 
     //asigno valores de manera aleatoria para mostrar que el boton se deshabilita cuando no hay stock
     const randStockValue = () => {
-        return Math.floor(Math.random() * (10));
+        // return Math.floor(Math.random() * (10));
+        return 10
+    }
+    const { id, title, category, description, price, image } = props.data;
+
+    const  {addItemCart,removeItemCart,isInCart} = useCartContext()
+
+    const setCountItems = (count) => {
+
+        const newItem = { 
+            id:id,
+            title:title, 
+            category:category, 
+            description:description, 
+            price:price, 
+            image:image,
+            count:count 
+        }
+        console.log("ItemCOunt . newItem", newItem)
+        addItemCart(newItem)
     }
 
-    const { title, category, description, price, image } = props.data;
+    const removeItem = () => {
+        removeItemCart(id)
+    }
+
 
     return (
         <div className="itemDetail">
@@ -22,7 +46,7 @@ const ItemDetail = (props) => {
                     <Card.Title>{title}</Card.Title>
                     <Card.Text>{description}</Card.Text>
                     <Card.Text className="fw-bold h3">${price}</Card.Text>
-                    <ItemCount stock={randStockValue()} />
+                    <ItemCount stock={randStockValue()} setCountItems={setCountItems} removeItemCart={removeItem} title={title} showRemoveButton={(isInCart(id)) ? true:false }/>
                 </Card.Body>
             </Card>
             

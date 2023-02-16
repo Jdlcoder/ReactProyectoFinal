@@ -1,0 +1,17 @@
+.cart {
+    margin-top: 8em;
+}
+
+.cart h3{
+    margin-bottom: 1em;
+}
+
+.emptyCart {
+    margin: 5em 0 0 0.7em;
+}
+
+.right-align {
+    text-align: end;
+    margin-right: 2em;
+  }
+  

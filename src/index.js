@@ -7,24 +7,29 @@ import ItemListContainer from './components/itemListContainer/ItemListContainer'
 import ItemDetailContainer from './components/itemDetailContainer/ItemDetailContainer';
 import reportWebVitals from './reportWebVitals';
 import ItemCategoryContainer from './components/itemCategoryContainer/ItemCategoryContainer';
+import { CartProvider } from './context/CartContext';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css';
+import Cart from './components/cart/Cart';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(
   <React.StrictMode>
-    <BrowserRouter >
-      <NavBar />
-      
-      <Routes>
-        <Route exact path='/' element={<ItemListContainer />} />
-        <Route exact path='/item/:productoId' element={<ItemDetailContainer />} />
-        <Route exact path="/category/:categoryIdParam" element={<ItemCategoryContainer/>}/>
-      </Routes>
+    <CartProvider>
+      <BrowserRouter >
+        <NavBar />
+        
+        <Routes>
+          <Route exact path='/' element={<ItemListContainer />} />
+          <Route exact path='/item/:productoId' element={<ItemDetailContainer />} />
+          <Route exact path="/category/:categoryIdParam" element={<ItemCategoryContainer/>}/>
+          <Route exact path="/cart" element={<Cart/>}/>
+        </Routes>
 
-    </BrowserRouter>
+      </BrowserRouter>
+    </CartProvider>
   </React.StrictMode>
 );
 
