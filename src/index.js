@@ -8,7 +8,6 @@ import ItemDetailContainer from './components/itemDetailContainer/ItemDetailCont
 import reportWebVitals from './reportWebVitals';
 import ItemCategoryContainer from './components/itemCategoryContainer/ItemCategoryContainer';
 import { CartProvider } from './context/CartContext';
-
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css';
 import Cart from './components/cart/Cart';
@@ -27,7 +26,6 @@ root.render(
           <Route exact path="/category/:categoryIdParam" element={<ItemCategoryContainer/>}/>
           <Route exact path="/cart" element={<Cart/>}/>
         </Routes>
-
       </BrowserRouter>
     </CartProvider>
   </React.StrictMode>

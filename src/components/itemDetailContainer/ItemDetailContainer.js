@@ -2,6 +2,10 @@ import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 
 import ItemDetail from '../itemDetail/ItemDetail';
+import {items,getQueryItemsFilteredId} from '../../services/firebase'
+import {db} from "../../services/firebase";
+import { collection, getDocs, query, where ,getDoc,doc} from "firebase/firestore";
+
 
 import './ItemDetailContainer.css';
 
@@ -11,11 +15,17 @@ const ItemDetailContainer = () => {
     const { productoId } = useParams()
 
     useEffect(()=>{
-        fetch(`https://fakestoreapi.com/products/${productoId}`)
-    .then(res=>res.json())
-    .then(productos => setProductos(<ItemDetail key={productos.id} id={"producto" + productos.id} data={productos} />))
+        const getData = async()=>{
+            
+            const response = await getDoc(doc(db,"listaProductos",productoId))
+            
+            setProductos(<ItemDetail key={response.id} id={"producto" + response.id} data={response.data()} />)
+        
+        }
+        getData();
     },[productoId])
 
+    
 
     return (
         <section>

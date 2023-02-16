@@ -7,6 +7,9 @@ import './ItemDetail.css';
 import react from 'react';
 
 const ItemDetail = (props) => {
+    const  {addItemCart,removeItemCart,isInCart} = useCartContext()
+
+    if (props.data) {
 
     //asigno valores de manera aleatoria para mostrar que el boton se deshabilita cuando no hay stock
     const randStockValue = () => {
@@ -15,7 +18,7 @@ const ItemDetail = (props) => {
     }
     const { id, title, category, description, price, image } = props.data;
 
-    const  {addItemCart,removeItemCart,isInCart} = useCartContext()
+    
 
     const setCountItems = (count) => {
 
@@ -36,7 +39,7 @@ const ItemDetail = (props) => {
         removeItemCart(id)
     }
 
-
+    
     return (
         <div className="itemDetail">
             <Card style={{width:"80%", height:"60%"}}>
@@ -52,6 +55,13 @@ const ItemDetail = (props) => {
             
         </div>
     )
+    } else {
+        return (
+            <div className="itemDetail">
+              <h3 className="itemDetailH3">No se encontraron productos que coincidan con ese id</h3>
+            </div>
+        )   
+    }
 }
 
 export default ItemDetail;

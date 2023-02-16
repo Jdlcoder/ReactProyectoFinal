@@ -1,5 +1,5 @@
 .cart {
-    margin-top: 8em;
+    margin:8em 1em 0 1em
 }
 
 .cart h3{
@@ -14,4 +14,9 @@
     text-align: end;
     margin-right: 2em;
   }
+  
+  .cartForm {
+      margin:0 1em 0 1em
+  }
+
   
