@@ -1,14 +1,14 @@
 import { initializeApp } from 'firebase/app';
 import { getFirestore, collection, addDoc } from 'firebase/firestore';
 
-//En produccion, estas credenciales deberían estar en un .env
+//Definimos un archivo .env para no exponer datos sensibles
 const firebaseConfig = {
-    apiKey: "AIzaSyAMIN5nWK1UOi-V8xBddy3APmKJHRXtfP0",
-    authDomain: "coderhouse-react-34880.firebaseapp.com",
-    projectId: "coderhouse-react-34880",
-    storageBucket: "coderhouse-react-34880.appspot.com",
-    messagingSenderId: "429166379530",
-    appId: "1:429166379530:web:808c97c68d2349c4abd5f3"
+    apiKey: process.env.REACT_APP_API_KEY,
+    authDomain: process.env.REACT_APP_AUTH_DOMAIN,
+    projectId: process.env.REACT_APP_PROJECT_ID,
+    storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
+    messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
+    appId: process.env.REACT_APP_APP_ID    
 };
 
 //Definimos lo base para conectarnos
