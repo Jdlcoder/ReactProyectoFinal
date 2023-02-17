@@ -18,8 +18,9 @@ const ItemDetailContainer = () => {
         const getData = async()=>{
             
             const response = await getDoc(doc(db,"listaProductos",productoId))
-            
-            setProductos(<ItemDetail key={response.id} id={"producto" + response.id} data={response.data()} />)
+            console.log(`ItemDetailContainer: id ${response.id}`)
+            // setProductos(<ItemDetail key={response.id} id={"producto" + response.id} data={response.data()} />)
+            setProductos(<ItemDetail key={response.id} id={response.id} data={{id:response.id, ...response.data()}} />)
         
         }
         getData();

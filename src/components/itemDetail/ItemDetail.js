@@ -13,8 +13,7 @@ const ItemDetail = (props) => {
 
     //asigno valores de manera aleatoria para mostrar que el boton se deshabilita cuando no hay stock
     const randStockValue = () => {
-        // return Math.floor(Math.random() * (10));
-        return 10
+        return Math.floor(Math.random() * (10));
     }
     const { id, title, category, description, price, image } = props.data;
 
@@ -39,6 +38,7 @@ const ItemDetail = (props) => {
         removeItemCart(id)
     }
 
+    console.log(`isIncart: ${isInCart(id)}, id ${id}`)
     
     return (
         <div className="itemDetail">

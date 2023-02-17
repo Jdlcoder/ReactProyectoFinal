@@ -32,7 +32,7 @@ const Cart = (props) => {
 
     const sendOrder = async (e) => {
         console.log("sendOrder - Valores recibidos:",newOrder)
-        const newOrdere = {
+        const NewOrder = {
             items:items,
             name:e.name,
             surname:e.surname,
@@ -41,14 +41,14 @@ const Cart = (props) => {
             submittimestamp:Date.now()
         }
 
-        const orderId = await doCheckout(newOrdere)
+        const orderId = await doCheckout(NewOrder)
             // alert("El pedido se generó correctamente con el id:"+orderId)
             setTextResult(`El pedido se generó correctamente con el id: ${orderId})`)
             setIsDone(true)
     }
   
     if (items.length > 0 ) {
-        if ( ! isDone)
+        if (! isDone)
         {
             return (
                 <div className="cart">
