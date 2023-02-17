@@ -1,37 +1,34 @@
+import { doCheckout } from '../../services/firebase';
+import {useState} from 'react';
+import { Link } from 'react-router-dom';
+import {useCartContext} from '../../context/CartContext';
+
+import CartForm from '../cartForm/CartForm';
+import CartTable from '../cartTable/CartTable';
+
 import './Cart.css';
-import {CartProvider,useCartContext} from '../../context/CartContext'
-import {useState} from 'react'
-import { doCheckout } from '../../services/firebase'
 
-import CartForm from '../cartForm/CartForm'
-import { Link } from 'react-router-dom'
+const Cart = () => {
 
-import { Table } from 'react-bootstrap';
-import { Button } from 'react-bootstrap'
+    //Contexto
+    const  {getItemsCart,clearCart} = useCartContext();
+    
+    const  [textResult, setTextResult] = useState('');
+    const  [isDone, setIsDone] = useState(false);
 
-const Cart = (props) => {
+    // Me traigo del contexto los items del carrito
+    const items = getItemsCart();
 
-    const  [showCheckout, setshowCheckout ] =useState(false)
-
-    const  {getItemsCart,removeItemCart,clearCart} = useCartContext()
-    const  [newOrder, setNewOrder] = useState({})
-    const [textResult, setTextResult] = useState('')
-    const [isDone, setIsDone] = useState(false)
-
-    const items = getItemsCart()
-
+    // Obtengo el importe total multiplicando precio unitario por cantidad de cada elemento del carrito
     const calculateTotal = () => {
         const sumTotal = items.reduce((total, e) => total + e.price * e.count, 0);
-        return sumTotal.toFixed(2)
+        return sumTotal.toFixed(2);
     }
-
-    const removeItem = (id) => {
-        removeItemCart(id)
-        console.log("borrando")
-    }
-
+    
+    //función para persistir en firestore la orden con los items y los datos del comprador
     const sendOrder = async (e) => {
-        console.log("sendOrder - Valores recibidos:",newOrder)
+
+        //incluimos todos los datos del producto + la cant. de cada uno + nombre + apellido + email + total + timestamp
         const NewOrder = {
             items:items,
             name:e.name,
@@ -41,124 +38,45 @@ const Cart = (props) => {
             submittimestamp:Date.now()
         }
 
-        const orderId = await doCheckout(NewOrder)
-            // alert("El pedido se generó correctamente con el id:"+orderId)
-            setTextResult(`El pedido se generó correctamente con el id: ${orderId})`)
-            setIsDone(true)
+        //usamos la función de firebase para persistir el objeto
+        const orderId = await doCheckout(NewOrder);
+
+        //Mostramos en pantalla el número de orden generado
+        setTextResult(`La orden se generó correctamente con el id: ${orderId}`);
+
+        //Cambio valor del flag para poder modificar el render
+        setIsDone(true);
     }
   
+    //Si no hay elementos en el carrito, mostramos una leyenda y el link para volver a productos. Sino, mostramos la grilla
     if (items.length > 0 ) {
-        if (! isDone)
+        //Si hay productos en el carrito, pero aún no se confirmó la compra, mostramos el form que solicita datos de contacto, sino no.
+        if (!isDone)
         {
             return (
                 <div className="cart">
-                    <h3>Estos son los productos que tenés en el carrito</h3>
-                    <Table striped bordered hover>
-                    <thead>
-                        <tr>
-                        <th>Título</th>
-                        <th>Categoría</th>
-                        <th>Cantidad</th>
-                        <th>Precio Unitario</th>
-                        <th>Subtotal</th>
-                        <th>Acción</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {items.map((item) => (
-                        <tr key={item.id}>
-                            <td>{item.title}</td>
-                            <td>{item.category}</td>
-                            <td>{item.count}</td>
-                            <td>{item.price}</td>
-                            <td>{(item.price*item.count).toFixed(2)}</td>
-                            <td><button onClick={() => removeItem(item.id)}>X</button></td>
-                        </tr>
-                        ))}
-                    </tbody>
-                    </Table>
-                    <h3 className="right-align">Total ${calculateTotal()}</h3>
-                    <div>
-                        <h3 className="clearCart">{textResult}</h3>
-                    </div>
+                    <CartTable items={items}/>
+                    <h3 className="right-align">Total ${calculateTotal()}</h3>                    
                     <div className="cartForm">
                         <CartForm clearCart={clearCart} sendOrder={sendOrder}/>
                     </div>
                 </div>
             )
         }else{
+            //Cuando ya se confirmo la orden
             return (
                 <div className="cart">
-                    <h3>Estos son los productos que tenés en el carrito</h3>
-                    <Table striped bordered hover>
-                    <thead>
-                        <tr>
-                        <th>Título</th>
-                        <th>Categoría</th>
-                        <th>Cantidad</th>
-                        <th>Precio Unitario</th>
-                        <th>Subtotal</th>
-                        <th>Acción</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {items.map((item) => (
-                        <tr key={item.id}>
-                            <td>{item.title}</td>
-                            <td>{item.category}</td>
-                            <td>{item.count}</td>
-                            <td>{item.price}</td>
-                            <td>{(item.price*item.count).toFixed(2)}</td>
-                            <td><button onClick={() => removeItem(item.id)}>X</button></td>
-                        </tr>
-                        ))}
-                    </tbody>
-                    </Table>
+                    <CartTable items={items}/>
                     <h3 className="right-align">Total ${calculateTotal()}</h3>
-                    <div>
-                        <h3 className="clearCart">{textResult}</h3>
-                    </div>
+                    <h3 className="clearCart">{textResult}</h3>
+                    {/* //Cuando el usuario sale de pantalla limpio el carrito */}
                     <Link onClick={clearCart} to="/">Continuar</Link>
                 </div>
             )
         }
-         return (
-            <div className="cart">
-                <h3>Estos son los productos que tenés en el carrito</h3>
-                <Table striped bordered hover>
-                <thead>
-                    <tr>
-                    <th>Título</th>
-                    <th>Categoría</th>
-                    <th>Cantidad</th>
-                    <th>Precio Unitario</th>
-                    <th>Subtotal</th>
-                    <th>Acción</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {items.map((item) => (
-                    <tr key={item.id}>
-                        <td>{item.title}</td>
-                        <td>{item.category}</td>
-                        <td>{item.count}</td>
-                        <td>{item.price}</td>
-                        <td>{(item.price*item.count).toFixed(2)}</td>
-                        <td><button onClick={() => removeItem(item.id)}>X</button></td>
-                    </tr>
-                    ))}
-                </tbody>
-                </Table>
-                <h3 className="right-align">Total ${calculateTotal()}</h3>
-                <div>
-                    <h3 className="clearCart">{textResult}</h3>
-                </div>
-                <div className="cartForm">
-                    <CartForm clearCart={clearCart} sendOrder={sendOrder}/>
-                </div>
-            </div>
-        )
+         
     }else{
+        //Este es el render cuando no hay elementos en el carrito
         return (
             <>
                 <h3 className="emptyCart">No hay ningún producto en el carrito</h3>

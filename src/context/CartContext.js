@@ -1,72 +1,68 @@
-import React, { useContext, createContext, useState , useEffect} from "react";
+import React, { useContext, useState } from "react";
 
 export const CartContext = React.createContext([]);
 
 export const useCartContext = () => {return  useContext(CartContext)}
 
+
 export const CartProvider = ({children}) => {
       
-    const [cartItems, setCartItems] = useState([])
+    const [cartItems, setCartItems] = useState([]);
     
-
-//     Métodos recomendados: 
-// addItem(item, quantity) // agregar cierta cantidad de un ítem al carrito
-// removeItem(itemId) // Remover un item del cart por usando su id
-// clear() // Remover todos los items
-// isInCart: (id) => true|false
-
-    //verifica la existencia de un producto en el carrito
+    //Verifica la existencia de un producto en el carrito
     const isInCart = (id) => {
         if ( cartItems.find( e => e.id === id) ) {
-            return true
+            return true;
         } else {
-            return false
+            return false;
         }
     }
-
-    useEffect(() => {
-        console.log("useEffect",cartItems)
-      }, [cartItems])
     
-    //agregamos el objeto producto al array, y si ya existe actualizamos el valor de count
+    //Agregamos el objeto producto al array, y si ya existe actualizamos el valor de count
     const addItemCart = (data) => {
         if (isInCart(data.id)) {
             const cartItemsTmp = cartItems.map(e => {
                 if (e.id === data.id){
-                    const newProduct = {...e,count:e.count+data.count}
-                    return newProduct
+                    const newProduct = {...e,count:e.count+data.count};
+                    return newProduct;
                 }else{
-                    return e
+                    return e;
                 }
-            })
-            setCartItems(cartItemsTmp)
+            });
+            setCartItems(cartItemsTmp);
         } else {
-            setCartItems([...cartItems, data])
+            setCartItems([...cartItems, data]);
         }
     }
 
-    //agregamos el objeto producto al array, y si ya existe actualizamos el valor de count
+    //Agregamos el objeto producto al array, y si ya existe actualizamos el valor de count
     const removeItemCart = (id) => {
 
+        //Primero obtenemos el index para saber en la posición en que está dentro del array
         const index = cartItems.findIndex((e) => e.id === id);
         
-        const cartItemsTmp = cartItems.filter( (e,i) => i !== index)
+        //Con el filter obtenemos un nuevo arryay sin el objeto que coincida con el id que queremos eliminar
+        const cartItemsTmp = cartItems.filter( (e,i) => i !== index);
         
-        setCartItems(cartItemsTmp)
+        //Actualizamos el array de items
+        setCartItems(cartItemsTmp);
         
     }
 
+    //Metodos para vaciar el carrito
     const clearCart = () => {
-        setCartItems([])
+        setCartItems([]);
     }
 
+    //Método usado en el Navbar para alimentar la información del carrito con la cantidad de elementos
     const getCountItemsCart = () => {
         const sumCount = cartItems.reduce((total, e) => total + e.count, 0);
-        return sumCount
+        return sumCount;
     }
 
+    //Método usado en Cart para obtener el listado de productos y mostrarlo junto a otros datos
     const getItemsCart = () => {
-        return cartItems
+        return cartItems;
     }
 
     return (

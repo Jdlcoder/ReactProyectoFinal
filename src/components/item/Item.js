@@ -7,6 +7,7 @@ import './Item.css'
 
 const Item = (props) => {
   const { title, category, price, id, image } = props.data;
+
   return (
     <div className='item_card'>
       <Card style={{ width: '25rem' }}>
@@ -19,9 +20,8 @@ const Item = (props) => {
         </Card.Body>
       </Card>
     </div>
-
   )
 
 }
 
-export default Item
+export default Item;
